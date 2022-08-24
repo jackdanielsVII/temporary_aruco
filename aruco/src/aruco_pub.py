@@ -11,7 +11,7 @@ from std_msgs.msg import Bool
 
 aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
 board = aruco.CharucoBoard_create(7, 5, 0.38, 0.3, aruco_dict)
-cam = cv2.VideoCapture(0)         # usb cam
+cam = cv2.VideoCapture(2)         # usb cam
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
@@ -20,7 +20,7 @@ def calibrate_charuco():
     allCorners = []
     allIds = []
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.00001)
-    images = glob.glob('/home/kevin/workspace/2022AutonomousShippingRobot/ArUco/camera_cal_img/video*.png')
+    images = glob.glob('/home/kevin/catkin_ws/src/aruco/camera_cal_img/video*.png')
     for im in images:
         print("=> Processing image {0}".format(im))
         frame = cv2.imread(im)
@@ -112,8 +112,8 @@ def detect_marker(matrix, distortion):
             #cv2.putText(frame, "%5.2f/  %5.2f/  %5.2f" % ((tvecs[0][0][0]), (tvecs[0][0][1]), (tvecs[0][0][2])),
             #            (0, 450), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 0, 255), 2)
 
-            cv2.putText(frame, "%.1f cm / %.0f deg" % ((tvecs[0][0][2] * 100), (rvecs[0][0][2] / math.pi * 180)),
-                         (0, 450), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 0, 255), 2)
+            # cv2.putText(frame, "%.1f cm / %.0f deg" % ((tvecs[0][0][2] * 100), (rvecs[0][0][2] / math.pi * 180)),
+            #              (0, 450), cv2.FONT_HERSHEY_PLAIN, 2.0, (0, 0, 255), 2)
 
             frame = cv2.aruco.drawDetectedMarkers(frame, coners, ids)
             cv2.imshow('video', frame)
@@ -130,6 +130,7 @@ def main():
     allCorners, allIds, imsize = calibrate_charuco()
     ret, mtx, dist, rvec, tvec = calibrate_camera(allCorners, allIds, imsize)
     detect_marker(mtx, dist)
+
 
 if __name__ == "__main__":
     main()
