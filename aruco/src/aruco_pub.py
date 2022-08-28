@@ -11,7 +11,7 @@ from std_msgs.msg import Bool
 
 aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
 board = aruco.CharucoBoard_create(7, 5, 0.38, 0.3, aruco_dict)
-cam = cv2.VideoCapture(2)         # usb cam
+cam = cv2.VideoCapture(0)         # usb cam
 cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
